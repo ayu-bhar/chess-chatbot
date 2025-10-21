@@ -3,14 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/initOnStart.js",
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.33.7",
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/server": "^11.11.0",
+    "@emotion/styled": "^11.14.1",
+    "@google/genai": "^1.25.0",
+    "@mui/icons-material": "^7.3.4",
+    "@mui/material": "^7.3.4",
+    "@pinecone-database/pinecone": "^6.1.2",
+    "axios": "^1.12.2",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^17.2.3",
+    "mongoose": "^8.19.1",
+    "next": "15.5.6",
+    "openai": "^6.5.0",
+    "pinecone-client": "^2.0.0",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.5.6"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
