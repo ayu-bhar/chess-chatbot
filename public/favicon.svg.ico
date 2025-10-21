@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Title: Chess Pawn -->
+  <title>Chess Pawn</title>
+
+  <!-- Base (Rectangle/Trapezoid Shape) -->
+  <path d="M 20 80 L 80 80 L 70 90 L 30 90 Z" fill="#333" stroke="#000" stroke-width="2"/>
+
+  <!-- Body (The main piece shape) -->
+  <path d="M 35 80 C 25 60, 30 40, 50 40 C 70 40, 75 60, 65 80 Z" fill="#444" stroke="#000" stroke-width="2"/>
+
+  <!-- Neck/Collar (Narrow section) -->
+  <rect x="40" y="35" width="20" height="5" rx="2" ry="2" fill="#333" stroke="#000" stroke-width="1.5"/>
+
+  <!-- Head/Ball (The top circular part) -->
+  <circle cx="50" cy="30" r="10" fill="#555" stroke="#000" stroke-width="2"/>
+
+  <!-- Highlight on the head -->
+  <circle cx="53" cy="27" r="3" fill="#FFF" opacity="0.3"/>
+
+  <!-- Bottom Base Plate -->
+  <rect x="25" y="90" width="50" height="5" rx="2" ry="2" fill="#222" stroke="#000" stroke-width="2"/>
+
+  <!-- Note: This design is a simplified, solid black/grey pawn, suitable for dark pieces. 
+       To make it a white pawn, change the 'fill' colors to lighter shades (e.g., #DDD, #FFF). -->
+</svg>
