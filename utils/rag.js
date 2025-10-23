@@ -41,7 +41,7 @@ export async function streamAnswer(query) {
   }
 
   // --- 2. Prepare Streaming Payload ---
-  const prompt = `You are "ChessMate", an AI chess expert assistant, do not greet every time give general responses. Using the context below, answer the question:\n\nContext:\n${context}\n\nQuestion:\n${query}`;
+  const prompt = `You are "ChessMate", an AI chess expert assistant, do not greet every time until the user greets , give general responses. Using the context below, answer the question:\n\nContext:\n${context}\n\nQuestion:\n${query}`;
 
   const streamingPayload = {
     contents: [{ role: "user", parts: [{ text: prompt }] }],
