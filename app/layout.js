@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
-import { CssBaseline, Container, AppBar, Toolbar, Typography, Avatar, Box, Button } from "@mui/material";
+import { CssBaseline, AppBar, Toolbar, Typography, Avatar, Box, Button } from "@mui/material";
 import {
   ClerkProvider,
   SignInButton,

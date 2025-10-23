@@ -98,11 +98,13 @@ export default function ChatBox() {
     const text = (typeof textArg === "string" ? textArg : input).trim();
     if (!text || loading) return;
 
-    // append user message locally immediately
+    // Append user message immediately
     const userMsg = { from: "user", text };
     setMessages((prev) => [...prev, userMsg]);
 
-    // clear input only if sending the current input (or always clear to keep UI clean)
+    // Add bot placeholder with 'isStreaming' flag — UI will show "Thinking..." + loader
+    setMessages((prev) => [...prev, { from: "bot", text: "", isStreaming: true }]);
+
     setInput("");
     setLoading(true);
 
@@ -114,12 +116,44 @@ export default function ChatBox() {
       });
 
       if (!res.ok) throw new Error(`server error ${res.status}`);
-      const data = await res.json();
-      const botText = data?.answer ?? "Sorry, I couldn't get an answer.";
-      setMessages((prev) => [...prev, { from: "bot", text: botText }]);
+      if (!res.body) throw new Error("No response body");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedText = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        // Decode and accumulate the chunk
+        const chunk = decoder.decode(value, { stream: true });
+        accumulatedText += chunk;
+
+        // Update the last message (bot's message) progressively and clear isStreaming on first chunk
+        setMessages((prev) => {
+          const newMessages = [...prev];
+          const lastIdx = newMessages.length - 1;
+          newMessages[lastIdx] = {
+            from: "bot",
+            text: accumulatedText,
+            isStreaming: false, // clear thinking flag as soon as we have text
+          };
+          return newMessages;
+        });
+      }
     } catch (err) {
-      setMessages((prev) => [...prev, { from: "bot", text: "Network error. Please try again." }]);
       console.error("chat send error:", err);
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const lastIdx = newMessages.length - 1;
+        newMessages[lastIdx] = {
+          from: "bot",
+          text: "Network error. Please try again.",
+          isStreaming: false,
+        };
+        return newMessages;
+      });
     } finally {
       setLoading(false);
     }
@@ -211,14 +245,11 @@ export default function ChatBox() {
         )}
 
         {messages.map((msg, idx) => (
-          <ChatBubble key={idx} from={msg.from} text={msg.text} />
+          // pass streaming flag to ChatBubble so it can show "Thinking..." + loader
+          <ChatBubble key={idx} from={msg.from} text={msg.text} streaming={!!msg.isStreaming} />
         ))}
 
-        {loading && (
-          <Box sx={{ my: 1, display: "flex", justifyContent: "flex-start" }}>
-            <CircularProgress size={20} sx={customStyles.loadingIndicator} />
-          </Box>
-        )}
+        {/* bottom thinking loader removed */}
       </Box>
 
       <Box sx={customStyles.inputContainer}>

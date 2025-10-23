@@ -1,9 +1,10 @@
 "use client";
 
-import { Box, Paper, Typography, Avatar, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Paper, Typography, Avatar, useTheme, useMediaQuery, CircularProgress } from "@mui/material";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-export default function ChatBubble({ from, text }) {
+
+export default function ChatBubble({ from, text, streaming = false }) {
   const isUser = from === "user";
   const { user } = useUser();
 
@@ -25,7 +26,7 @@ export default function ChatBubble({ from, text }) {
     >
       {!isUser && (
         <Avatar sx={{ bgcolor: "transparent", width: { xs: 28, sm: 32 }, height: { xs: 28, sm: 32 } }}>
-         <Image src={"/chess.svg"} alt="User Avatar" layout="fill" objectFit="cover" />
+          <Image src={"/chess.svg"} alt="AI Avatar" layout="fill" objectFit="cover" />
         </Avatar>
       )}
 
@@ -44,11 +45,24 @@ export default function ChatBubble({ from, text }) {
           wordWrap: "break-word",
           whiteSpace: "pre-wrap",
           fontSize: { xs: "0.92rem", sm: "1rem" },
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
         }}
       >
-        <Typography variant="body1" sx={{ wordBreak: "break-word" }}>
-          {text}
-        </Typography>
+        {streaming && !text ? (
+          // show thinking + spinner until first chunk arrives
+          <>
+            <CircularProgress size={16} sx={{ color: isUser ? "#fff" : "#1976d2" }} />
+            <Typography variant="body1" sx={{ ml: 0.5 }}>
+              Thinking...
+            </Typography>
+          </>
+        ) : (
+          <Typography variant="body1" sx={{ wordBreak: "break-word" }}>
+            {text}
+          </Typography>
+        )}
       </Paper>
 
       {isUser && (
